@@ -2,6 +2,8 @@ package org.csci3130.hourie.emailvalidatorui;
 
 import javax.servlet.annotation.WebServlet;
 
+import org.csci3130.hourie.emailvalidator.EmailValidator;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
@@ -22,20 +24,31 @@ import com.vaadin.ui.VerticalLayout;
 @Theme("mytheme")
 public class MyUI extends UI {
 
+    /**
+     * Worked from the Vaadin MyUI basic example. 
+     */
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+      
+        EmailValidator emailValidator = EmailValidator.getInstance();
         final VerticalLayout layout = new VerticalLayout();
         
-        final TextField name = new TextField();
-        name.setCaption("Type your name here:");
+        final TextField email = new TextField();
+        email.setCaption("Type an email here:");
 
-        Button button = new Button("Click Me");
+        Button button = new Button("Validate");
         button.addClickListener( e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
-                    + ", it works!"));
+            if (emailValidator.isValid(email.getValue())){
+              layout.addComponent(new Label("The email: " + email.getValue() 
+                      + " is valid.")); 
+            }
+            else {
+              layout.addComponent(new Label("The email: " + email.getValue() 
+              + " is invalid.")); 
+            }
         });
         
-        layout.addComponents(name, button);
+        layout.addComponents(email, button);
         layout.setMargin(true);
         layout.setSpacing(true);
         
